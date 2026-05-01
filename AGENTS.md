@@ -31,7 +31,7 @@
 - Linting: `npm run lint`
 - Formatting code: `npm run format`
 - Regenerating Bash behavior test fixtures: `npm run test-regen`
-  **IMPORTANT** This should *only* be run on systems with a
+  **IMPORTANT** This should _only_ be run on systems with a
   recent `Bash 5.3` build as the default `bash` binary.
 - Benchmarking: `npm run bench`
 - Profiling: `npm run prof`
@@ -57,7 +57,7 @@ Prefer to consolidate and reuse code whenever possible.
 
 **NEVER** add new methods, objects, or functions, without
 explicit human direction. When asked to do so, make the
-*smallest* possible increase to the API surface area.
+_smallest_ possible increase to the API surface area.
 
 ### Testing
 
