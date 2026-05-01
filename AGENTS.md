@@ -79,6 +79,42 @@ Export all types.
 
 Every public method and option must have a JSDoc comment.
 
+### Commit Messages
+
+Do not use "semantic commits". Whether it is a feature, fix, or
+chore, should be evident from context.
+
+The first line of the commit message should summarize the change
+in less than 50 characters
+
+Write commit messages in the present tense imperative voice,
+describing what the patch does without qualifiers or referring to
+the patch itself. For example: `add whiz deduplication for
+performance`, not `patch adds whiz deduplication, which should
+improve performance somewhat`.
+
+The body of the commit message, if necessary, should explain the
+reasoning behind the change, with hard line-breaks at 80
+characters.
+
+If there are breaking behavior changes for users, these **MUST**
+be described in the commit message body.
+
+The commit message should only very rarely mention the
+implementation – that is should be evident from the code change
+itself. However, it _may_ be worthwhile to explain _why_ a given
+implementation is chosen, when alternatives exist.
+
+Commit messages, like code, should be as minimal as possible to
+accomplish their goal.
+
+- **NEVER** link to or reference IDs of bugs, issues, or other
+  objects in issue trackers other than the GitHub issue tracker
+  for this repository.
+- **DO** include a `fix: #1234` link to any GitHub issues that
+  this patch fixes, or `re: #1234` link to any GitHub issues or
+  pull requests that are relevant to this change.
+
 ## Boundaries & Guardrails
 
 - **DO NOT** modify anything in the `/scripts` directory.
