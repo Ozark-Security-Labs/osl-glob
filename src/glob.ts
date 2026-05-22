@@ -1,6 +1,5 @@
 import type { MinimatchOptions } from 'minimatch'
 import { Minimatch } from 'minimatch'
-import type { Minipass } from 'minipass'
 import { fileURLToPath } from 'node:url'
 import type { FSOption, Path } from 'path-scurry'
 import {
@@ -11,7 +10,7 @@ import {
 } from 'path-scurry'
 import type { IgnoreLike } from './ignore.js'
 import { Pattern } from './pattern.js'
-import { GlobStream, GlobWalker } from './walker.js'
+import { GlobWalker } from './walker.js'
 
 export type MatchSet = Minimatch['set']
 export type GlobParts = Exclude<Minimatch['globParts'], undefined>
@@ -576,78 +575,8 @@ export class Glob<Opts extends GlobOptions> implements GlobOptions {
     ]
   }
 
-  /**
-   * synchronous {@link Glob.walk}
-   */
-  walkSync(): Results<Opts>
-  walkSync(): (string | Path)[] {
-    return [
-      ...new GlobWalker(this.patterns, this.scurry.cwd, {
-        ...this.opts,
-        maxDepth:
-          this.maxDepth !== Infinity ?
-            this.maxDepth + this.scurry.cwd.depth()
-          : Infinity,
-        platform: this.platform,
-        nocase: this.nocase,
-        includeChildMatches: this.includeChildMatches,
-      }).walkSync(),
-    ]
-  }
-
-  /**
-   * Stream results asynchronously.
-   */
-  stream(): Minipass<Result<Opts>, Result<Opts>>
-  stream(): Minipass<string | Path, string | Path> {
-    return new GlobStream(this.patterns, this.scurry.cwd, {
-      ...this.opts,
-      maxDepth:
-        this.maxDepth !== Infinity ?
-          this.maxDepth + this.scurry.cwd.depth()
-        : Infinity,
-      platform: this.platform,
-      nocase: this.nocase,
-      includeChildMatches: this.includeChildMatches,
-    }).stream()
-  }
-
-  /**
-   * Stream results synchronously.
-   */
-  streamSync(): Minipass<Result<Opts>, Result<Opts>>
-  streamSync(): Minipass<string | Path, string | Path> {
-    return new GlobStream(this.patterns, this.scurry.cwd, {
-      ...this.opts,
-      maxDepth:
-        this.maxDepth !== Infinity ?
-          this.maxDepth + this.scurry.cwd.depth()
-        : Infinity,
-      platform: this.platform,
-      nocase: this.nocase,
-      includeChildMatches: this.includeChildMatches,
-    }).streamSync()
-  }
-
-  /**
-   * Default sync iteration function. Returns a Generator that
-   * iterates over the results.
-   */
-  iterateSync(): Generator<Result<Opts>, void, void> {
-    return this.streamSync()[Symbol.iterator]()
-  }
-  [Symbol.iterator]() {
-    return this.iterateSync()
-  }
-
-  /**
-   * Default async iteration function. Returns an AsyncGenerator that
-   * iterates over the results.
-   */
-  iterate(): AsyncGenerator<Result<Opts>, void, void> {
-    return this.stream()[Symbol.asyncIterator]()
-  }
-  [Symbol.asyncIterator]() {
-    return this.iterate()
-  }
+  // Upstream's walkSync(), stream(), streamSync(), iterate(), iterateSync(),
+  // and the Symbol.iterator / Symbol.asyncIterator implementations were
+  // removed in the Ozark trim — the only public glob() function in this
+  // fork's index.ts calls walk(). See OZARK-NOTES.md.
 }

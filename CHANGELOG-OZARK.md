@@ -15,3 +15,10 @@ All Ozark-side patches applied on top of the upstream fork point (`upstream/cac5
 - **Reference:** internal pilot verification step 2 (patch round-trip)
 - **Author:** @bjcorder
 - **Notes:** Benign CHANGELOG append to demonstrate the patch-and-SHA-bump loop end-to-end. No source or runtime behavior changed; consumers should bump the pinned SHA and observe identical test/scan outcomes.
+
+## 2026-05-22 — Aggressive public-surface trim
+
+- **Type:** trim — public API reduction
+- **Reference:** consumer surface audit: `deterministic-deps` uses only the async `glob()` function
+- **Author:** @bjcorder
+- **Notes:** Reduced public exports from 18 named exports to 1 function + 4 type re-exports. Rewrote `src/index.ts` (224 → 52 LOC) to expose only `glob(pattern, options?)`. Removed `Glob` class methods: `walkSync`, `stream`, `streamSync`, `iterate`, `iterateSync`, `[Symbol.iterator]`, `[Symbol.asyncIterator]` (`src/glob.ts` 653 → 582 LOC). Removed `GlobWalker.walkSync()` and the entire `GlobStream` class from `src/walker.ts` (506 → 466 LOC). Deleted entire upstream `test/` directory (2,957 LOC), `examples/`, `tap-snapshots/`, `logo/`, benchmark scripts, `typedoc.json`, upstream collaboration docs. Net src LOC: 2,116 → 1,833 (13% reduction in retained source — modest because internal class hierarchies in `walker.ts`/`processor.ts` are interconnected; deeper surgery deferred to Phase 1c). Smoke test confirmed `glob('src/*.ts')` returns the 7 expected files.

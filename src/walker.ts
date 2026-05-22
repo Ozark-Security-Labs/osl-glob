@@ -451,56 +451,7 @@ export class GlobWalker<
     return this.matches
   }
 
-  walkSync(): Set<Result<O>> {
-    if (this.signal?.aborted) throw this.signal.reason
-    if (this.path.isUnknown()) {
-      this.path.lstatSync()
-    }
-    // nothing for the callback to do, because this never pauses
-    this.walkCBSync(this.path, this.patterns, () => {
-      if (this.signal?.aborted) throw this.signal.reason
-    })
-    return this.matches
-  }
+  // GlobWalker.walkSync() was removed in the Ozark trim — only Glob.walk()
+  // (async) is exposed via the public glob() function. See OZARK-NOTES.md.
 }
 
-export class GlobStream<
-  O extends GlobWalkerOpts = GlobWalkerOpts,
-> extends GlobUtil<O> {
-  results: Minipass<Result<O>, Result<O>>
-
-  constructor(patterns: Pattern[], path: Path, opts: O) {
-    super(patterns, path, opts)
-    this.results = new Minipass<Result<O>, Result<O>>({
-      signal: this.signal,
-      objectMode: true,
-    })
-    this.results.on('drain', () => this.resume())
-    this.results.on('resume', () => this.resume())
-  }
-
-  matchEmit(e: Result<O>): void {
-    this.results.write(e)
-    if (!this.results.flowing) this.pause()
-  }
-
-  stream(): MatchStream<O> {
-    const target = this.path
-    if (target.isUnknown()) {
-      void target.lstat().then(() => {
-        this.walkCB(target, this.patterns, () => this.results.end())
-      })
-    } else {
-      this.walkCB(target, this.patterns, () => this.results.end())
-    }
-    return this.results
-  }
-
-  streamSync(): MatchStream<O> {
-    if (this.path.isUnknown()) {
-      this.path.lstatSync()
-    }
-    this.walkCBSync(this.path, this.patterns, () => this.results.end())
-    return this.results
-  }
-}
