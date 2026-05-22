@@ -1,3 +1,10 @@
+> **Ozark Security Labs internal fork.**
+> This is a trimmed fork of [`isaacs/node-glob`](https://github.com/isaacs/node-glob) maintained for the Ozark product line. It is not published to npm; consumers install via git URL pinned to a commit SHA. CVEs and bugs are patched directly in this fork rather than syncing upstream wholesale. See [`OZARK-NOTES.md`](OZARK-NOTES.md) for surface kept/removed and [`CHANGELOG-OZARK.md`](CHANGELOG-OZARK.md) for the patch log. The full upstream license is preserved verbatim in [`LICENSE-UPSTREAM`](LICENSE-UPSTREAM). Org-wide context: [Ozark-Security-Labs/.github](https://github.com/Ozark-Security-Labs/.github).
+>
+> Upstream README follows.
+
+---
+
 # Glob
 
 Match files using the patterns the shell uses.
